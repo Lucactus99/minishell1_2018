@@ -25,9 +25,17 @@ int my_strlen(char const *);
 int my_put_nbr(int);
 char *my_strcpy(char *, char const *);
 char *get_next_line(int);
-char **transform_2d(char *);
-int my_strcmp(char const *s1, char const *s2);
-int my_strncmp(char const *s1, char const *s2, int n);
+int my_strcmp(char const *, char const *);
+char *my_strcat(char *, char const *);
+int my_strncmp(char const *, char const *, int);
+void free_command(char *, char *const *, char *);
+int count_lines_path(char *);
+char **get_path(char **);
+char *get_program_name(char *);
+int get_nbr_args(char *);
+void do_command(char **, char *, char *const *);
+int find_command(char *, char *const *, char **, char **);
+void print_env(char **);
 extern char *strsignal(int __sig) __THROW;
 
 #endif //MY_H_

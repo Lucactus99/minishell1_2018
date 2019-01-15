@@ -10,14 +10,17 @@
 CC      =       gcc
 
 SRC     =   minishell_main.c \
+            minishell_useful.c \
+            minishell_get_info.c \
+            minishell_command.c \
             src/my_strcpy.c \
             src/my_putchar.c \
             src/my_putstr.c \
             src/my_put_nbr.c \
             src/get_next_line.c \
-            src/transform_2d.c \
             src/my_strcmp.c \
-            src/my_strncmp.c
+            src/my_strncmp.c \
+            src/my_strcat.c
 
 OBJ     =       $(SRC:.c=.o)
 

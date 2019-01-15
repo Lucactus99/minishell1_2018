@@ -32,12 +32,11 @@ int check_length(char const *s1, char const *s2, int nb, int n)
         else
             return (s2[n + 1]);
     }
+    return (0);
 }
 
 int my_strncmp(char const *s1, char const *s2, int n)
 {
-    int nb = n;
-
     n = check_number(s1, s2, n);
     if ((s1[n] - s2[n]) == 0)
         return (0);
