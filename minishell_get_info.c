@@ -11,7 +11,10 @@ char **put_path(struct data data)
 {
     int j;
 
-    for (j = 0; my_strncmp(data.env[j], "PATH", 4) != 0; j++);
+    for (j = 0; data.env[j + 1] != NULL; j++) {
+        if (my_strncmp(data.env[j], "PATH", 4) == 0)
+            break;
+    }
     for (int i = 0; i < data.nbr_args; i++) {
         if (i == 0) {
             data.env[j] = my_strcpy(data.env[j], data.path[i]);
@@ -22,15 +25,27 @@ char **put_path(struct data data)
     return (data.env);
 }
 
+char **rm_path(struct data data)
+{
+    int j;
+
+    for (j = 0; my_strncmp(data.env[j], "PATH", 4) != 0; j++);
+    for (; data.env[j + 1] != NULL; j++)
+        data.env[j] = data.env[j + 1];
+    return (data.env);
+}
+
 char **modify_path(struct data data)
 {
-    for (int i = 0; data.path[i + 1] != NULL; i++)
-        free(data.path[i]);
+    if (data.path[0] != NULL) {
+        for (int i = 0; data.path[i + 1] != NULL; i++)
+            free(data.path[i]);
+    }
     for (int i = 0; i < data.nbr_args; i++)
         data.path[i] = malloc(sizeof(char) * 20);
-    for (int i = 0; i < data.nbr_args; i++) {
+    for (int i = 0; i < data.nbr_args; i++)
         data.path[i] = my_strcpy(data.path[i], data.args[i + 1]);
-    }
+    data.path[data.nbr_args] = NULL;
     data.env = put_path(data);
     return (data.path);
 }
@@ -56,29 +71,4 @@ char **get_path(char **env)
         }
     }
     return (path);
-}
-
-char *get_program_name(char *av)
-{
-    char *str;
-    int i = 0;
-    int j = 0;
-
-    for (; av[i] != ' ' && av[i] != '\0'; i++);
-    str = malloc(sizeof(char) * (i + 1));
-    for (; j < i; j++)
-        str[j] = av[j];
-    str[j] = '\0';
-    return (str);
-}
-
-int get_nbr_args(char *av)
-{
-    int count = 0;
-
-    for (int i = 0; av[i] != 0; i++) {
-        if (av[i] == ' ')
-            count++;
-    }
-    return (count);
 }

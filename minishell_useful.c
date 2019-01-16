@@ -26,3 +26,28 @@ int count_lines(char *str)
     count++;
     return (count);
 }
+
+char *get_program_name(char *av)
+{
+    char *str;
+    int i = 0;
+    int j = 0;
+
+    for (; av[i] != ' ' && av[i] != '\0'; i++);
+    str = malloc(sizeof(char) * (i + 1));
+    for (; j < i; j++)
+        str[j] = av[j];
+    str[j] = '\0';
+    return (str);
+}
+
+int get_nbr_args(char *av)
+{
+    int count = 0;
+
+    for (int i = 0; av[i] != 0; i++) {
+        if (av[i] == ' ')
+            count++;
+    }
+    return (count);
+}

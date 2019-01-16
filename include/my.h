@@ -48,6 +48,8 @@ void do_command(char **, char *, char *const *);
 int find_command(struct data);
 void print_env(char **);
 char **modify_path(struct data);
+char **put_path(struct data);
+char **rm_path(struct data);
 extern char *strsignal(int __sig) __THROW;
 
 #endif //MY_H_
