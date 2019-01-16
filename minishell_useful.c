@@ -7,15 +7,15 @@
 
 #include "my.h"
 
-void free_command(char *program_name, char *const *args, char *str)
+void free_command(struct data data, char *str)
 {
-    free(program_name);
-    for (int i = 0; args[i + 1] != NULL; i++)
-        free(args[i]);
+    free(data.program_name);
     free(str);
+    for (int i = 1; i < data.nbr_args; i++)
+        free(data.args[i]);
 }
 
-int count_lines_path(char *str)
+int count_lines(char *str)
 {
     int count = 0;
 
