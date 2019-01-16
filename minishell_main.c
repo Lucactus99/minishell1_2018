@@ -25,6 +25,7 @@ char *const *put_args(char *av, int nbr_args)
         }
     }
     tmp[j + 1][0] = '\0';
+    tmp[j + 1] = NULL;
     return (tmp);
 }
 
