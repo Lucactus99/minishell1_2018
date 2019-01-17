@@ -47,12 +47,13 @@ int main(int ac, char **av, char **env)
     while (1) {
         my_putstr("§> ");
         str = get_next_line(0);
-        data.program_name = get_program_name(str);
-        data.nbr_args = get_nbr_args(str);
-        data.args = put_args(str, data.nbr_args);
-        if (find_command(data) == 1)
-            return (0);
-        free_command(data, str);
+        if (str[0] != 0) {
+            data.program_name = get_program_name(str);
+            data.nbr_args = get_nbr_args(str);
+            data.args = put_args(str, data.nbr_args);
+            find_command(data);
+            free_command(data, str);
+        }
     }
     return (0);
 }

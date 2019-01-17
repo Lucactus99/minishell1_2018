@@ -45,7 +45,7 @@ char **get_path(char **);
 char *get_program_name(char *);
 int get_nbr_args(char *);
 void do_command(char **, char *, char *const *);
-int find_command(struct data);
+void find_command(struct data);
 void print_env(char **);
 char **modify_path(struct data);
 char **put_path(struct data);
