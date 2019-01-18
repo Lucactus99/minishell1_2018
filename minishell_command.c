@@ -23,6 +23,7 @@ void do_command(char **path, char *program_name, char *const *args)
     } else if (c_pid > 0) {
         if (wait(&status) < 0)
             perror("wait");
+        kill(c_pid, SIGKILL);
     } else
         perror("fork failed");
     if (status != 0)

@@ -9,6 +9,7 @@
 #define MY_H_
 
 #include <string.h>
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -51,5 +52,6 @@ char **modify_path(struct data);
 char **put_path(struct data);
 char **rm_path(struct data);
 extern char *strsignal(int __sig) __THROW;
+int kill(pid_t pid, int sig);
 
 #endif //MY_H_
