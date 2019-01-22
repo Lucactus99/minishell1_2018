@@ -26,8 +26,10 @@ void do_command(char **path, char *program_name, char *const *args)
         kill(c_pid, SIGKILL);
     } else
         perror("fork failed");
-    if (status != 0)
+    if (status == 139)
         my_putstr("Command not found.\n");
+    else if (status != 0)
+        my_putstr("Segmentation Fault.\n");
 }
 
 void find_command_3(struct data data)

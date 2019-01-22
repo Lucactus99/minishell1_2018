@@ -44,10 +44,11 @@ int main(int ac, char **av, char **env)
 
     data.path = get_path(env);
     data.env = env;
-    while (1) {
-        my_putstr("§> ");
+    while (str != NULL) {
+        if (isatty(0))
+            my_putstr("§> ");
         str = get_next_line(0);
-        if (str[0] != 0) {
+        if (str != NULL && str[0] != 0) {
             data.program_name = get_program_name(str);
             data.nbr_args = get_nbr_args(str);
             data.args = put_args(str, data.nbr_args);
