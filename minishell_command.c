@@ -9,9 +9,7 @@
 
 void display_command_errors(char *program_name, int status)
 {
-    if (my_strncmp(program_name, "./", 2) == 0)
-        wait(&status);
-    if (status == 9 || status == 134)
+    if (status == 9 || status == 134|| status == 139)
         my_putstr("Segmentation fault\n");
     else if (status != 0) {
         my_putstr(program_name);
@@ -19,29 +17,33 @@ void display_command_errors(char *program_name, int status)
     }
 }
 
-void do_command(char **path, char *program_name, char *const *args)
+void do_command(struct data data)
 {
     int c_pid = fork();
     int status;
     char *tmp;
 
-    if (c_pid == 0 && path[0] != NULL &&
-    my_strncmp(program_name, "./", 2) != 0) {
-        for (int i = 0; path[i] != NULL; i++) {
+    if (c_pid == 0 && data.path[0] != NULL) {
+        if (my_strncmp(data.program_name, "./", 2) == 0) {
+            data.program_name += 2;
+            execve(data.program_name, data.args, data.env);
+            return;
+        }
+        for (int i = 0; data.path[i] != NULL; i++) {
             tmp = malloc(sizeof(char) * 20);
-            tmp = my_strcat(path[i], "/");
-            execve(my_strcat(tmp, program_name), args, NULL);
+            tmp = my_strcat(data.path[i], "/");
+            execve(my_strcat(tmp, data.program_name), data.args, data.env);
             free(tmp);
         }
     } else if (c_pid > 0) {
-        if (path[0] != NULL && my_strncmp(program_name, "./", 2) != 0)
+        if (data.path[0] != NULL)
             wait(&status);
         kill(c_pid, SIGKILL);
     } else {
-        if (path[0] != NULL && my_strncmp(program_name, "./", 2) != 0)
+        if (data.path[0] != NULL)
             perror("fork failed");
     }
-    display_command_errors(program_name, status);
+    display_command_errors(data.program_name, status);
 }
 
 void find_command_3(struct data data)
@@ -57,7 +59,7 @@ void find_command_3(struct data data)
         }
         return;
     } else
-        do_command(data.path, data.program_name, data.args);
+        do_command(data);
 }
 
 void find_command_2(struct data data)
