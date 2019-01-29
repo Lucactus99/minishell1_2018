@@ -48,24 +48,14 @@ void do_command(struct data data)
 
 void find_command_3(struct data data)
 {
-    int length = 0;
-
     if (my_strcmp(data.program_name, "unsetenv") == 0) {
         if (data.args[1] == NULL) {
             my_putstr("unsetenv: Too few arguments.\n");
-            return;
-        }
-        if (my_strncmp(data.args[1], "PATH", 4) == 0) {
+        } else if (my_strncmp(data.args[1], "PATH", 4) == 0) {
             data.path[0] = NULL;
             data.env = rm_path(data);
-        } else {
-            length = find_line_env(data);
-            if (length >= 0) {
-                data.env[length] = NULL;
-                for (int j = length; data.env[j + 1] != 0; j++)
-                    data.env[j] = data.env[j + 1];
-            }
-        }
+        } else
+            data.env = unset_env(data);
         return;
     } else
         do_command(data);
@@ -74,14 +64,16 @@ void find_command_3(struct data data)
 void find_command_2(struct data data)
 {
     if (my_strcmp(data.program_name, "setenv") == 0) {
-        if (data.nbr_args == 0) {
+        if (data.nbr_args >= 3) {
+            my_putstr("setenv: Too many arguments.\n");
+            return;
+        }
+        if (data.nbr_args == 0)
             print_env(data.env);
-        }
-        if (my_strncmp(data.args[1], "PATH", 4) == 0) {
+        else if (my_strncmp(data.args[1], "PATH", 4) == 0)
             data.path = modify_path(data);
-        } else {
-            data.env = add_env(data);
-        }
+        else
+            data.env = set_env(data);
         return;
     }
     find_command_3(data);

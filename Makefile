@@ -13,6 +13,7 @@ SRC     =   minishell_main.c \
             minishell_useful.c \
             minishell_get_info.c \
             minishell_command.c \
+            minishell_env.c \
             src/my_strcpy.c \
             src/my_putchar.c \
             src/my_putstr.c \

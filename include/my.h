@@ -55,5 +55,7 @@ extern char *strsignal(int __sig) __THROW;
 int kill(pid_t pid, int sig);
 char **add_env(struct data);
 int find_line_env(struct data);
+char **set_env(struct data);
+char **unset_env(struct data);
 
 #endif //MY_H_
