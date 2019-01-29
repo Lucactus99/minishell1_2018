@@ -31,7 +31,7 @@ char *const *put_args(char *av, int nbr_args)
 
 void print_env(char **env)
 {
-    for (int i = 0; env[i + 1] != 0; i++) {
+    for (int i = 0; env[i] != 0; i++) {
         my_putstr(env[i]);
         my_putchar('\n');
     }

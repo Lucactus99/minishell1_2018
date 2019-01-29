@@ -51,3 +51,14 @@ int get_nbr_args(char *av)
     }
     return (count);
 }
+
+int find_line_env(struct data data)
+{
+    int line = -1;
+
+    for (int i = 0; data.env[i] != 0; i++) {
+        if (my_strncmp(data.env[i], data.args[1], my_strlen(data.args[1])) == 0)
+            line = i;
+    }
+    return (line);
+}
