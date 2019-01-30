@@ -37,3 +37,19 @@ char **unset_env(struct data data)
     }
     return (data.env);
 }
+
+char *get_home(char **env)
+{
+    char *str;
+
+    for (int i = 0; env[i]; i++) {
+        if (my_strncmp(env[i], "HOME", 4) == 0) {
+            str = malloc(sizeof(char) * my_strlen(env[i]));
+            str = my_strcpy(str, env[i]);
+        }
+    }
+    while (str[0] != '=')
+        str++;
+    str++;
+    return (str);
+}

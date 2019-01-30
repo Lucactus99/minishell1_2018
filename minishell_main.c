@@ -56,7 +56,8 @@ void main_loop(struct data data)
     char *str;
 
     while (str != NULL) {
-        my_putstr("§> ");
+        if (isatty(0))
+            my_putstr("§> ");
         str = get_next_line(0);
         //str = remove_useless(str);
         if (str != NULL && str[0] != 0 && str[0] != 32) {

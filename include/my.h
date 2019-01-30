@@ -59,5 +59,6 @@ int find_line_env(struct data);
 char **set_env(struct data);
 char **unset_env(struct data);
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+char *get_home(char **env);
 
 #endif //MY_H_
