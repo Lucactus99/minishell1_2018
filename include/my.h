@@ -7,6 +7,7 @@
 
 #ifndef MY_H_
 #define MY_H_
+#define GNU_SOURCE
 
 #include <string.h>
 #include <signal.h>
@@ -57,5 +58,6 @@ char **add_env(struct data);
 int find_line_env(struct data);
 char **set_env(struct data);
 char **unset_env(struct data);
+ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif //MY_H_

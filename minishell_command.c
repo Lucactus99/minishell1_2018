@@ -18,6 +18,7 @@ void display_command_errors(char *program_name, int status)
 void do_command(struct data data)
 {
     int c_pid = fork();
+    int pid = getpid();
     int status;
     char *tmp;
 

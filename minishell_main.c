@@ -37,9 +37,44 @@ void print_env(char **env)
     }
 }
 
+char *remove_useless(char *str)
+{
+    int i = 0;
+    char *new_str;
+
+    for (; str[0] == 32 || str[0] == 9; str++);
+    for (; (str[i] != 32 || str[i] != 9) && (str[i + 1] != 32 ||
+    str[i + 1] != 9) && str[i] != 0; i++);
+    str[i + 1] = 0;
+    new_str = malloc(sizeof(char) * my_strlen(str));
+    new_str = my_strcpy(new_str, str);
+    return (new_str);
+}
+
+void main_loop(struct data data)
+{
+    char *str = malloc(sizeof(char) * 100);
+    size_t len;
+
+    while (str != NULL) {
+        str = malloc(sizeof(char) * 100);
+        if (isatty(0))
+            my_putstr("§> ");
+        getline(&str, &len, stdin);
+        str = remove_useless(str);
+        str[my_strlen(str) - 1] = 0;
+        if (str != NULL && str[0] != 0 && str[0] != 32) {
+            data.program_name = get_program_name(str);
+            data.nbr_args = get_nbr_args(str);
+            data.args = put_args(str, data.nbr_args);
+            find_command(data);
+            free_command(data, str);
+        }
+    }
+}
+
 int main(int ac, char **av, char **env)
 {
-    char *str;
     struct data data;
 
     if (env == NULL)
@@ -48,17 +83,6 @@ int main(int ac, char **av, char **env)
     (void)av;
     data.path = get_path(env);
     data.env = env;
-    while (str != NULL) {
-        if (isatty(0))
-            my_putstr("§> ");
-        str = get_next_line(0);
-        if (str != NULL && str[0] != 0) {
-            data.program_name = get_program_name(str);
-            data.nbr_args = get_nbr_args(str);
-            data.args = put_args(str, data.nbr_args);
-            find_command(data);
-            free_command(data, str);
-        }
-    }
+    main_loop(data);
     return (0);
 }
