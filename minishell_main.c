@@ -55,12 +55,13 @@ void main_loop(struct data data)
 {
     char *str = malloc(sizeof(char) * 100);
     size_t len;
+    int tmp = 0;
 
-    while (str != NULL) {
+    while (tmp != -1) {
         str = malloc(sizeof(char) * 100);
         if (isatty(0))
             my_putstr("§> ");
-        getline(&str, &len, stdin);
+        tmp = getline(&str, &len, stdin);
         str = remove_useless(str);
         str[my_strlen(str) - 1] = 0;
         if (str != NULL && str[0] != 0 && str[0] != 32) {
