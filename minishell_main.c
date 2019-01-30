@@ -53,17 +53,12 @@ char *remove_useless(char *str)
 
 void main_loop(struct data data)
 {
-    char *str = malloc(sizeof(char) * 100);
-    size_t len;
-    int tmp = 0;
+    char *str;
 
-    while (tmp != -1) {
-        str = malloc(sizeof(char) * 100);
-        if (isatty(0))
-            my_putstr("§> ");
-        tmp = getline(&str, &len, stdin);
-        str = remove_useless(str);
-        str[my_strlen(str) - 1] = 0;
+    while (str != NULL) {
+        my_putstr("§> ");
+        str = get_next_line(0);
+        //str = remove_useless(str);
         if (str != NULL && str[0] != 0 && str[0] != 32) {
             data.program_name = get_program_name(str);
             data.nbr_args = get_nbr_args(str);
