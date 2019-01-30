@@ -9,9 +9,7 @@
 
 void display_command_errors(char *program_name, int status)
 {
-    if (status == 9 || status == 134 || status == 139)
-        my_putstr("Segmentation fault\n");
-    else if (status != 0) {
+    if (status != 0) {
         my_putstr(program_name);
         my_putstr(": Command not found.\n");
     }

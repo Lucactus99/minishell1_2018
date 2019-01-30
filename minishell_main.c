@@ -42,6 +42,8 @@ int main(int ac, char **av, char **env)
     char *str;
     struct data data;
 
+    if (env == NULL)
+        return (84);
     (void)ac;
     (void)av;
     data.path = get_path(env);
