@@ -95,7 +95,7 @@ void find_command(struct data data)
     if (my_strcmp(data.program_name, "cd") == 0) {
         if (data.args[1] == NULL)
             chdir(get_home(data.env));
-        else if (chdir(data.args[1]) <= 0) {
+        else if (chdir(data.args[1]) < 0) {
             my_putstr(data.args[1]);
             my_putstr(": No such file or directory.\n");
         }
