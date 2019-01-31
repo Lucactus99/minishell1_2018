@@ -40,14 +40,20 @@ void print_env(char **env)
 char *remove_useless(char *str)
 {
     int i = 0;
+    int a = 0;
     char *new_str;
 
+    new_str = malloc(sizeof(char) * (my_strlen(str) + 1));
     for (; str[0] == 32 || str[0] == 9; str++);
-    for (; (str[i] != 32 || str[i] != 9) && (str[i + 1] != 32 ||
-    str[i + 1] != 9) && str[i] != 0; i++);
-    str[i + 1] = 0;
-    new_str = malloc(sizeof(char) * my_strlen(str));
-    new_str = my_strcpy(new_str, str);
+    for (; str[i] != 0; i++) {
+        if (((str[i] == 32 || str[i] == 9) && str[i + 1] != 32 && str[i + 1] != 9) || (str[i] != 32 && str[i] != 9)) {
+            new_str[a] = str[i];
+            a++;
+        }
+    }
+    new_str[a] = 0;
+    for (int d = my_strlen(new_str) - 1; new_str[d] == 32; d--)
+        new_str[d] = 0;
     return (new_str);
 }
 
@@ -55,12 +61,12 @@ void main_loop(struct data data)
 {
     char *str;
 
-    while (str != NULL) {
+    while (str != NULL && my_strcmp(str, "exit") != 0) {
         if (isatty(0))
             my_putstr("§> ");
         str = get_next_line(0);
-        //str = remove_useless(str);
-        if (str != NULL && str[0] != 0 && str[0] != 32) {
+        if (str != NULL && str[0] != 0) {
+            str = remove_useless(str);
             data.program_name = get_program_name(str);
             data.nbr_args = get_nbr_args(str);
             data.args = put_args(str, data.nbr_args);

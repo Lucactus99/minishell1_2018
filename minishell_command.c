@@ -7,18 +7,9 @@
 
 #include "my.h"
 
-void display_command_errors(char *program_name, int status)
-{
-    if (status != 0) {
-        my_putstr(program_name);
-        my_putstr(": Command not found.\n");
-    }
-}
-
 void do_command(struct data data)
 {
     int c_pid = fork();
-    int pid = getpid();
     int status;
     char *tmp;
 
@@ -29,20 +20,23 @@ void do_command(struct data data)
             return;
         }
         for (int i = 0; data.path[i] != NULL; i++) {
-            tmp = malloc(sizeof(char) * 20);
+            tmp = malloc(sizeof(char) * 40);
             tmp = my_strcat(data.path[i], "/");
             execve(my_strcat(tmp, data.program_name), data.args, data.env);
             free(tmp);
         }
+        my_putstr(data.program_name);
+        my_putstr(": Command not found.\n");
+        exit(0);
     } else if (c_pid > 0) {
-        if (data.path[0] != NULL)
-            wait(&status);
+        wait(&status);
         kill(c_pid, SIGKILL);
     } else {
         if (data.path[0] != NULL)
             perror("fork failed");
     }
-    display_command_errors(data.program_name, status);
+    if (WTERMSIG(status) == 11)
+        my_putstr("Segmentation fault (core dumped)\n");
 }
 
 void find_command_3(struct data data)
@@ -51,7 +45,6 @@ void find_command_3(struct data data)
         if (data.args[1] == NULL) {
             my_putstr("unsetenv: Too few arguments.\n");
         } else if (my_strncmp(data.args[1], "PATH", 4) == 0) {
-            data.path[0] = NULL;
             data.env = rm_path(data);
         } else
             data.env = unset_env(data);
@@ -82,12 +75,13 @@ void find_command(struct data data)
 {
     char pwd[128];
 
-    getcwd(pwd, sizeof(pwd));
     if (my_strcmp(data.program_name, "exit") == 0) {
         my_putstr("exit\n");
-        exit(0);
+        while (1)
+            exit(0);
     }
     if (my_strcmp(data.program_name, "pwd") == 0) {
+        getcwd(pwd, sizeof(pwd));
         my_putstr(pwd);
         my_putchar('\n');
         return;
