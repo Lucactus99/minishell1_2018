@@ -16,7 +16,10 @@ void do_command(struct data data, char *tmp)
         if (my_strncmp(data.program_name, "./", 2) == 0) {
             data.program_name += 2;
             execve(data.program_name, data.args, data.env);
-            return;
+            my_putstr("./");
+            my_putstr(data.program_name);
+            my_putstr(": Command not found.\n");
+            exit(0);
         }
         if (execve(tmp, data.args, data.env) <= 0)
             perror("execve failed");
@@ -34,7 +37,10 @@ void do_command(struct data data, char *tmp)
 char *is_existing(struct data data)
 {
     char *tmp;
+    char *binary = "binary";
 
+    if (my_strncmp(data.program_name, "./", 2) == 0)
+        return (binary);
     for (int i = 0; data.path[i] != NULL && data.path[i][0] != 0; i++) {
         tmp = malloc(sizeof(char) * 40);
         tmp = my_strcpy(tmp, data.path[i]);
@@ -59,7 +65,6 @@ void find_command_3(struct data data)
         tmp = is_existing(data);
         if (tmp != NULL) {
             do_command(data, tmp);
-            free(tmp);
         } else {
             my_putstr(data.program_name);
             my_putstr(": Command not found.\n");

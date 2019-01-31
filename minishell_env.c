@@ -25,8 +25,6 @@ void unsetenv_command(struct data data)
 {
     if (data.args[1] == NULL) {
         my_putstr("unsetenv: Too few arguments.\n");
-    } else if (my_strncmp(data.args[1], "PATH", 4) == 0) {
-        data.env = rm_path(data);
     } else
         data.env = unset_env(data);
 }

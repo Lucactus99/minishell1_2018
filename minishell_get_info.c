@@ -25,16 +25,6 @@ char **put_path(struct data data)
     return (data.env);
 }
 
-char **rm_path(struct data data)
-{
-    int j;
-
-    for (j = 0; my_strncmp(data.env[j], "PATH", 4) != 0; j++);
-    for (; data.env[j + 1] != NULL; j++)
-        data.env[j] = data.env[j + 1];
-    return (data.env);
-}
-
 char **modify_path(struct data data)
 {
     if (data.path[0] != NULL) {
