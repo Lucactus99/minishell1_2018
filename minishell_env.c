@@ -7,6 +7,30 @@
 
 #include "my.h"
 
+void setenv_command(struct data data)
+{
+    if (data.nbr_args >= 3) {
+        my_putstr("setenv: Too many arguments.\n");
+        return;
+    }
+    if (data.nbr_args == 0)
+        print_env(data.env);
+    else if (my_strncmp(data.args[1], "PATH", 4) == 0)
+        data.path = modify_path(data);
+    else
+        data.env = set_env(data);
+}
+
+void unsetenv_command(struct data data)
+{
+    if (data.args[1] == NULL) {
+        my_putstr("unsetenv: Too few arguments.\n");
+    } else if (my_strncmp(data.args[1], "PATH", 4) == 0) {
+        data.env = rm_path(data);
+    } else
+        data.env = unset_env(data);
+}
+
 char **set_env(struct data data)
 {
     int i = 0;

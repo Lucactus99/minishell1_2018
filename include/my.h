@@ -46,7 +46,7 @@ int count_lines(char *);
 char **get_path(char **);
 char *get_program_name(char *);
 int get_nbr_args(char *);
-void do_command(struct data);
+void do_command(struct data, char *);
 void find_command(struct data);
 void print_env(char **);
 char **modify_path(struct data);
@@ -60,5 +60,7 @@ char **set_env(struct data);
 char **unset_env(struct data);
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 char *get_home(char **env);
+void setenv_command(struct data);
+void unsetenv_command(struct data);
 
 #endif //MY_H_

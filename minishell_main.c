@@ -46,7 +46,10 @@ char *remove_useless(char *str)
     new_str = malloc(sizeof(char) * (my_strlen(str) + 1));
     for (; str[0] == 32 || str[0] == 9; str++);
     for (; str[i] != 0; i++) {
-        if (((str[i] == 32 || str[i] == 9) && str[i + 1] != 32 && str[i + 1] != 9) || (str[i] != 32 && str[i] != 9)) {
+        if (str[i] == 9)
+            str[i] = 32;
+        if (((str[i] == 32 || str[i] == 9) && str[i + 1] != 32 &&
+        str[i + 1] != 9) || (str[i] != 32 && str[i] != 9)) {
             new_str[a] = str[i];
             a++;
         }
