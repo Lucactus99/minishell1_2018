@@ -21,8 +21,10 @@ void do_command(struct data data, char *tmp)
             my_putstr(": Command not found.\n");
             exit(0);
         }
-        if (execve(tmp, data.args, data.env) <= 0)
-            perror("execve failed");
+        if (execve(tmp, data.args, data.env) <= 0) {
+            my_putstr(tmp);
+            my_putstr(": Pemission denied.\n");
+        }
         exit(0);
     } else if (c_pid > 0) {
         wait(&status);
@@ -34,6 +36,15 @@ void do_command(struct data data, char *tmp)
         my_putstr("Segmentation fault (core dumped)\n");
 }
 
+int check_error_path(char *str)
+{
+    for (int i = 0; str[i] != 0; i++) {
+        if (str[i] == '/' && (str[i + 1] == '/' || str[i + 1] == '\0'))
+            return (1);
+    }
+    return (0);
+}
+
 char *is_existing(struct data data)
 {
     char *tmp;
@@ -41,12 +52,17 @@ char *is_existing(struct data data)
 
     if (my_strncmp(data.program_name, "./", 2) == 0)
         return (binary);
+    if (access(data.program_name, F_OK) == 0) {
+        tmp = malloc(sizeof(char) * my_strlen(data.program_name) + 1);
+        tmp = my_strcpy(tmp, data.program_name);
+        return (tmp);
+    }
     for (int i = 0; data.path[i] != NULL && data.path[i][0] != 0; i++) {
         tmp = malloc(sizeof(char) * 40);
         tmp = my_strcpy(tmp, data.path[i]);
         tmp = my_strcat(tmp, "/");
         tmp = my_strcat(tmp, data.program_name);
-        if (access(tmp, F_OK) == 0)
+        if (access(tmp, F_OK) == 0 && check_error_path(tmp) == 0)
             return (tmp);
         free(tmp);
     }
@@ -79,7 +95,7 @@ void find_command_2(struct data data)
             chdir(get_home(data.env));
         else if (chdir(data.args[1]) < 0) {
             my_putstr(data.args[1]);
-            my_putstr(": No such file or directory.\n");
+            my_putstr(": Not a directory.\n");
         }
     } else if (my_strcmp(data.program_name, "env") == 0) {
         print_env(data.env);
