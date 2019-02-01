@@ -28,8 +28,10 @@ char **put_path(struct data data)
 char **modify_path(struct data data)
 {
     if (data.path[0] != NULL) {
-        for (int i = 0; data.path[i + 1] != NULL; i++)
+        for (int i = 0; data.path[i + 1] != 0; i++) {
+            data.path[i] = NULL;
             free(data.path[i]);
+        }
     }
     for (int i = 0; i < data.nbr_args; i++)
         data.path[i] = malloc(sizeof(char) * 20);
@@ -54,7 +56,7 @@ char **fill_path(char **path, char **env, int i)
             b++;
         }
     }
-    path[a + 1] = 0;
+    path[a + 1] = NULL;
     return (path);
 }
 
