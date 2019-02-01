@@ -26,8 +26,7 @@ void do_command(struct data data, char *tmp)
         if (data.path[0] != NULL)
             perror("fork failed");
     }
-    if (WTERMSIG(status) == 11)
-        my_putstr_err("Segmentation fault (core dumped)\n");
+    print_error(status);
 }
 
 void cd_command(struct data data)
