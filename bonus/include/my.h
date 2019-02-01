@@ -68,5 +68,7 @@ int my_putstr_err(char const *);
 char *is_existing(struct data);
 void do_binary(struct data);
 char *remove_useless(char *);
+void print_error(int);
+void print_error_4(int);
 
 #endif //MY_H_
