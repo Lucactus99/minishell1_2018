@@ -7,6 +7,16 @@
 
 #include "my.h"
 
+void do_binary(struct data data)
+{
+    data.program_name += 2;
+    execve(data.program_name, data.args, data.env);
+    my_putstr_err("./");
+    my_putstr_err(data.program_name);
+    my_putstr_err(": Command not found.\n");
+    exit(0);
+}
+
 char *const *put_args(char *av, int nbr_args)
 {
     char **tmp = malloc(sizeof(char *) * (nbr_args + 1));
@@ -27,14 +37,6 @@ char *const *put_args(char *av, int nbr_args)
     tmp[j + 1][0] = '\0';
     tmp[j + 1] = NULL;
     return (tmp);
-}
-
-void print_env(char **env)
-{
-    for (int i = 0; env[i] != 0; i++) {
-        my_putstr(env[i]);
-        my_putchar('\n');
-    }
 }
 
 char *remove_useless(char *str)
@@ -77,21 +79,6 @@ void main_loop(struct data data)
             free_command(data, str);
         }
     }
-}
-
-char *get_old_pwd(char **env)
-{
-    char *str;
-
-    for (int i = 0; env[i] != 0; i++) {
-        if (my_strncmp(env[i], "OLDPWD", 6) == 0) {
-            str = malloc(sizeof(char) * my_strlen(env[i]));
-            str = my_strcpy(str, env[i]);
-        }
-    }
-    for (int i = 0; i < 7; i++)
-        str++;
-    return (str);
 }
 
 int main(int ac, char **av, char **env)
