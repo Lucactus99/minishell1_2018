@@ -65,5 +65,7 @@ char *get_old_pwd(char **);
 char **put_old_pwd(char **, char *);
 void my_putchar_err(char);
 int my_putstr_err(char const *);
+char *is_existing(struct data);
+void do_binary(struct data);
 
 #endif //MY_H_

@@ -27,31 +27,6 @@ int count_lines(char *str)
     return (count);
 }
 
-char *get_program_name(char *av)
-{
-    char *str;
-    int i = 0;
-    int j = 0;
-
-    for (; av[i] != ' ' && av[i] != '\0'; i++);
-    str = malloc(sizeof(char) * (i + 1));
-    for (; j < i; j++)
-        str[j] = av[j];
-    str[j] = '\0';
-    return (str);
-}
-
-int get_nbr_args(char *av)
-{
-    int count = 0;
-
-    for (int i = 0; av[i] != 0; i++) {
-        if (av[i] == ' ')
-            count++;
-    }
-    return (count);
-}
-
 int find_line_env(struct data data)
 {
     int line = -1;
@@ -61,4 +36,37 @@ int find_line_env(struct data data)
             line = i;
     }
     return (line);
+}
+
+int check_error_path(char *str)
+{
+    for (int i = 0; str[i] != 0; i++) {
+        if (str[i] == '/' && (str[i + 1] == '/' || str[i + 1] == '\0'))
+            return (1);
+    }
+    return (0);
+}
+
+char *is_existing(struct data data)
+{
+    char *tmp;
+    char *binary = "binary";
+
+    if (my_strncmp(data.program_name, "./", 2) == 0)
+        return (binary);
+    if (access(data.program_name, F_OK) == 0) {
+        tmp = malloc(sizeof(char) * my_strlen(data.program_name) + 1);
+        tmp = my_strcpy(tmp, data.program_name);
+        return (tmp);
+    }
+    for (int i = 0; data.path[i] != NULL && data.path[i][0] != 0; i++) {
+        tmp = malloc(sizeof(char) * 40);
+        tmp = my_strcpy(tmp, data.path[i]);
+        tmp = my_strcat(tmp, "/");
+        tmp = my_strcat(tmp, data.program_name);
+        if (access(tmp, F_OK) == 0 && check_error_path(tmp) == 0)
+            return (tmp);
+        free(tmp);
+    }
+    return (NULL);
 }
