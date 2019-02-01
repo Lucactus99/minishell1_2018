@@ -10,7 +10,7 @@
 void setenv_command(struct data data)
 {
     if (data.nbr_args >= 3) {
-        my_putstr("setenv: Too many arguments.\n");
+        my_putstr_err("setenv: Too many arguments.\n");
         return;
     }
     if (data.nbr_args == 0)
@@ -24,7 +24,7 @@ void setenv_command(struct data data)
 void unsetenv_command(struct data data)
 {
     if (data.args[1] == NULL) {
-        my_putstr("unsetenv: Too few arguments.\n");
+        my_putstr_err("unsetenv: Too few arguments.\n");
     } else
         data.env = unset_env(data);
 }

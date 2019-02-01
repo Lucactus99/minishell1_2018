@@ -16,14 +16,14 @@ void do_command(struct data data, char *tmp)
         if (my_strncmp(data.program_name, "./", 2) == 0) {
             data.program_name += 2;
             execve(data.program_name, data.args, data.env);
-            my_putstr("./");
-            my_putstr(data.program_name);
-            my_putstr(": Command not found.\n");
+            my_putstr_err("./");
+            my_putstr_err(data.program_name);
+            my_putstr_err(": Command not found.\n");
             exit(0);
         }
         if (execve(tmp, data.args, data.env) <= 0) {
-            my_putstr(tmp);
-            my_putstr(": Pemission denied.\n");
+            my_putstr_err(tmp);
+            my_putstr_err(": Pemission denied.\n");
         }
         exit(0);
     } else if (c_pid > 0) {
@@ -33,7 +33,7 @@ void do_command(struct data data, char *tmp)
             perror("fork failed");
     }
     if (WTERMSIG(status) == 11)
-        my_putstr("Segmentation fault (core dumped)\n");
+        my_putstr_err("Segmentation fault (core dumped)\n");
 }
 
 int check_error_path(char *str)
@@ -82,16 +82,14 @@ void find_command_3(struct data data)
         if (tmp != NULL) {
             do_command(data, tmp);
         } else {
-            my_putstr(data.program_name);
-            my_putstr(": Command not found.\n");
+            my_putstr_err(data.program_name);
+            my_putstr_err(": Command not found.\n");
         }
     }
 }
 
 char **put_old_pwd(char **env, char *pwd)
 {
-    int j = 0;
-
     for (int i = 0; env[i] != NULL; i++) {
         if (my_strncmp(env[i], "OLDPWD", 6) == 0) {
             env[i] = malloc(sizeof(char) * (my_strlen(pwd) + 7));
@@ -124,8 +122,8 @@ void find_command_2(struct data data)
         getcwd(pwd, sizeof(pwd));
         data.env = put_old_pwd(data.env, pwd);
         if (chdir(data.args[1]) < 0) {
-            my_putstr(data.args[1]);
-            my_putstr(": Not a directory.\n");
+            my_putstr_err(data.args[1]);
+            my_putstr_err(": Not a directory.\n");
         }
     } else if (my_strcmp(data.program_name, "env") == 0) {
         print_env(data.env);

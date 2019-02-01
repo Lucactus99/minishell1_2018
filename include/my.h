@@ -58,10 +58,12 @@ char **add_env(struct data);
 int find_line_env(struct data);
 char **set_env(struct data);
 char **unset_env(struct data);
-char *get_home(char **env);
+char *get_home(char **);
 void setenv_command(struct data);
 void unsetenv_command(struct data);
-char *get_old_pwd(char **env);
-char **put_old_pwd(char **env, char *pwd);
+char *get_old_pwd(char **);
+char **put_old_pwd(char **, char *);
+void my_putchar_err(char);
+int my_putstr_err(char const *);
 
 #endif //MY_H_
