@@ -81,6 +81,17 @@ void main_loop(struct data data)
     }
 }
 
+char **new_path_to_env(char **env)
+{
+    int j = 0;
+
+    for (; env[j] != NULL; j++);
+    env[j] = malloc(sizeof(char) * 50);
+    env[j] = my_strcpy(env[j], "PATH=/bin:/usr/local/bin:/sbin:/usr/bin:/usr/sbin");
+    env[j + 1] = 0;
+    return (env);
+}
+
 int main(int ac, char **av, char **env)
 {
     struct data data;
@@ -90,6 +101,10 @@ int main(int ac, char **av, char **env)
     (void)ac;
     (void)av;
     data.path = get_path(env);
+    if (data.path == NULL) {
+        env = new_path_to_env(env);
+        data.path = get_path(env);
+    }
     data.env = env;
     main_loop(data);
     return (0);

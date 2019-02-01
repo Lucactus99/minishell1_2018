@@ -47,11 +47,14 @@ char **get_path(char **env)
     int a = 0;
     int b = 0;
 
-    for (i = 0; my_strncmp(env[i], "PATH", 4) != 0; i++);
+    for (i = 0; my_strncmp(env[i], "PATH", 4) != 0; i++) {
+        if (env[i + 1] == NULL && my_strncmp(env[i], "PATH", 4) != 0)
+            return (NULL);
+    }
     path = malloc(sizeof(char *) * count_lines(env[i]));
     for (int j = 0; j < count_lines(env[i]); j++)
         path[j] = malloc(sizeof(char) * 20);
-    for (int j = i - 1; env[i][j] != 0; j++) {
+    for (int j = 5; env[i][j] != 0; j++) {
         if (env[i][j] == ':') {
             a++;
             b = 0;
@@ -60,6 +63,7 @@ char **get_path(char **env)
             b++;
         }
     }
+    path[a + 1] = 0;
     return (path);
 }
 
