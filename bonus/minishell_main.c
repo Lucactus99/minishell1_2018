@@ -42,10 +42,16 @@ char *const *put_args(char *av, int nbr_args)
 void main_loop(struct data data)
 {
     char *str = "lucas";
+    char pwd[128];
 
     while (str != NULL && my_strcmp(str, "exit") != 0) {
-        if (isatty(0))
-            my_putstr("§> ");
+        if (isatty(0)) {
+            getcwd(pwd, sizeof(pwd));
+            my_putstr("\033[1;36m");
+            my_putstr(pwd);
+            my_putstr("\033[0m ");
+            my_putstr("\033[01;33m§> \033[0m");
+        }
         str = get_next_line(0);
         if (str != NULL && str[0] != 0) {
             str = remove_useless(str);
