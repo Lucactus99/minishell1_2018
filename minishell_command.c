@@ -88,12 +88,42 @@ void find_command_3(struct data data)
     }
 }
 
+char **put_old_pwd(char **env, char *pwd)
+{
+    int j = 0;
+
+    for (int i = 0; env[i] != NULL; i++) {
+        if (my_strncmp(env[i], "OLDPWD", 6) == 0) {
+            env[i] = malloc(sizeof(char) * (my_strlen(pwd) + 7));
+            env[i] = my_strcpy(env[i], "OLDPWD=");
+            env[i] = my_strcat(env[i], pwd);
+            return (env);
+        }
+    }
+    return (env);
+}
+
 void find_command_2(struct data data)
 {
+    char pwd[128];
+
     if (my_strcmp(data.program_name, "cd") == 0) {
-        if (data.args[1] == NULL)
+        if (data.args[1] == NULL) {
+            getcwd(pwd, sizeof(pwd));
+            data.env = put_old_pwd(data.env, pwd);
             chdir(get_home(data.env));
-        else if (chdir(data.args[1]) < 0) {
+            return;
+        }
+        if (my_strcmp(data.args[1], "-") == 0) {
+            data.old_pwd = get_old_pwd(data.env);
+            getcwd(pwd, sizeof(pwd));
+            data.env = put_old_pwd(data.env, pwd);
+            chdir(data.old_pwd);
+            return;
+        }
+        getcwd(pwd, sizeof(pwd));
+        data.env = put_old_pwd(data.env, pwd);
+        if (chdir(data.args[1]) < 0) {
             my_putstr(data.args[1]);
             my_putstr(": Not a directory.\n");
         }

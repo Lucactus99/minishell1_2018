@@ -28,6 +28,7 @@ struct data
     int nbr_args;
     char *const *args;
     char **path;
+    char *old_pwd;
     char **env;
 };
 
@@ -60,5 +61,7 @@ char **unset_env(struct data);
 char *get_home(char **env);
 void setenv_command(struct data);
 void unsetenv_command(struct data);
+char *get_old_pwd(char **env);
+char **put_old_pwd(char **env, char *pwd);
 
 #endif //MY_H_

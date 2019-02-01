@@ -79,6 +79,21 @@ void main_loop(struct data data)
     }
 }
 
+char *get_old_pwd(char **env)
+{
+    char *str;
+
+    for (int i = 0; env[i] != 0; i++) {
+        if (my_strncmp(env[i], "OLDPWD", 6) == 0) {
+            str = malloc(sizeof(char) * my_strlen(env[i]));
+            str = my_strcpy(str, env[i]);
+        }
+    }
+    for (int i = 0; i < 7; i++)
+        str++;
+    return (str);
+}
+
 int main(int ac, char **av, char **env)
 {
     struct data data;
