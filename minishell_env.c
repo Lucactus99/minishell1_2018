@@ -7,30 +7,35 @@
 
 #include "my.h"
 
-void setenv_command(struct data data)
+int setenv_command(struct data data)
 {
     if (data.nbr_args == 0) {
         print_env(data.env);
-        return;
+        return (0);
     }
     if (data.nbr_args >= 3) {
         my_putstr_err("setenv: Too many arguments.\n");
-        return;
+        return (1);
     }
-    if (my_str_isalpha(data.args[1]) == 0)
+    if (my_str_isalpha(data.args[1]) == 0) {
         my_putstr_err("setenv: Variable name must contain alphanumeric characters.\n");
-    else if (my_strncmp(data.args[1], "PATH", 4) == 0)
+        return (1);
+    }
+    if (my_strncmp(data.args[1], "PATH", 4) == 0)
         data.path = modify_path(data);
     else
         data.env = set_env(data);
+    return (0);
 }
 
-void unsetenv_command(struct data data)
+int unsetenv_command(struct data data)
 {
     if (data.args[1] == NULL) {
         my_putstr_err("unsetenv: Too few arguments.\n");
+        return (1);
     } else
         data.env = unset_env(data);
+    return (0);
 }
 
 char **set_env(struct data data)

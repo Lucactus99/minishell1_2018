@@ -34,7 +34,7 @@ int do_command(struct data data, char *tmp)
     return (data.exit_status);
 }
 
-void cd_command(struct data data)
+int cd_command(struct data data)
 {
     char pwd[128];
 
@@ -49,21 +49,24 @@ void cd_command(struct data data)
                 my_putstr_err(": Not a directory.\n");
             } else
                 my_putstr_err("cd: Can't change to home directory.\n");
+            return (1);
         }
-        return;
+        return (0);
     }
     if (my_strcmp(data.args[1], "-") == 0) {
         data.old_pwd = get_old_pwd(data.env);
         if (data.old_pwd == NULL) {
             my_putstr_err(": No such file or directory.\n");
-            return;
+            return (1);
         }
         getcwd(pwd, sizeof(pwd));
-        if (chdir(data.old_pwd) < 0)
+        if (chdir(data.old_pwd) < 0) {
             my_putstr_err(": No such file or directory.\n");
+            return (1);
+        }
         else
             data.env = put_old_pwd(data.env, pwd);
-        return;
+        return (0);
     }
     getcwd(pwd, sizeof(pwd));
     if (my_strcmp(data.args[1], ".") != 0)
@@ -76,7 +79,9 @@ void cd_command(struct data data)
             my_putstr_err(data.args[1]);
             my_putstr_err(": No such file or directory.\n");
         }
+        return (1);
     }
+    return (0);
 }
 
 int find_command_2(struct data data)
@@ -84,9 +89,9 @@ int find_command_2(struct data data)
     char *tmp;
 
     if (my_strcmp(data.program_name, "setenv") == 0) {
-        setenv_command(data);
+        data.exit_status = setenv_command(data);
     } else if (my_strcmp(data.program_name, "unsetenv") == 0) {
-        unsetenv_command(data);
+        data.exit_status = unsetenv_command(data);
     } else {
         tmp = is_existing(data);
         if (tmp != NULL) {
@@ -109,7 +114,7 @@ int find_command(struct data data)
             exit(0);
     } else {
         if (my_strcmp(data.program_name, "cd") == 0)
-            cd_command(data);
+            data.exit_status = cd_command(data);
         else if (my_strcmp(data.program_name, "env") == 0)
             print_env(data.env);
         else
