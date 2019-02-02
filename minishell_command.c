@@ -41,21 +41,41 @@ void cd_command(struct data data)
     if (data.args[1] == NULL) {
         getcwd(pwd, sizeof(pwd));
         data.env = put_old_pwd(data.env, pwd);
-        chdir(get_home(data.env));
+        if (chdir(get_home(data.env)) < 0) {
+            if (errno == 14)
+                my_putstr_err("cd: No home directory.\n");
+            else if (errno == 20) {
+                my_putstr_err(data.args[1]);
+                my_putstr_err(": Not a directory.\n");
+            } else
+                my_putstr_err("cd: Can't change to home directory.\n");
+        }
         return;
     }
     if (my_strcmp(data.args[1], "-") == 0) {
         data.old_pwd = get_old_pwd(data.env);
+        if (data.old_pwd == NULL) {
+            my_putstr_err(": No such file or directory.\n");
+            return;
+        }
         getcwd(pwd, sizeof(pwd));
-        data.env = put_old_pwd(data.env, pwd);
-        chdir(data.old_pwd);
+        if (chdir(data.old_pwd) < 0)
+            my_putstr_err(": No such file or directory.\n");
+        else
+            data.env = put_old_pwd(data.env, pwd);
         return;
     }
     getcwd(pwd, sizeof(pwd));
-    data.env = put_old_pwd(data.env, pwd);
+    if (my_strcmp(data.args[1], ".") != 0)
+        data.env = put_old_pwd(data.env, pwd);
     if (chdir(data.args[1]) < 0) {
-        my_putstr_err(data.args[1]);
-        my_putstr_err(": Not a directory.\n");
+        if (errno == 20) {
+            my_putstr_err(data.args[1]);
+            my_putstr_err(": Not a directory.\n");
+        } else if (errno == 2) {
+            my_putstr_err(data.args[1]);
+            my_putstr_err(": No such file or directory.\n");
+        }
     }
 }
 
@@ -82,16 +102,11 @@ int find_command_2(struct data data)
 
 int find_command(struct data data)
 {
-    char pwd[128];
-
     if (my_strcmp(data.program_name, "exit") == 0) {
-        my_putstr("exit\n");
+        if (isatty(0))
+            my_putstr("exit\n");
         while (1)
-            exit(data.exit_status);
-    } else if (my_strcmp(data.program_name, "pwd") == 0) {
-        getcwd(pwd, sizeof(pwd));
-        my_putstr(pwd);
-        my_putchar('\n');
+            exit(0);
     } else {
         if (my_strcmp(data.program_name, "cd") == 0)
             cd_command(data);

@@ -9,6 +9,7 @@
 #define MY_H_
 #define GNU_SOURCE
 
+#include <errno.h>
 #include <string.h>
 #include <signal.h>
 #include <stdio.h>
@@ -67,7 +68,7 @@ char **put_old_pwd(char **, char *);
 void my_putchar_err(char);
 int my_putstr_err(char const *);
 char *is_existing(struct data);
-void do_binary(struct data);
+int do_binary(struct data);
 char *remove_useless(char *);
 void print_error(int);
 void print_error_4(int);

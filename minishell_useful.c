@@ -30,9 +30,13 @@ int count_lines(char *str)
 int find_line_env(struct data data)
 {
     int line = -1;
+    char *str = malloc(sizeof(char) * (my_strlen(data.args[1]) + 2));
 
+    str = my_strcpy(str, data.args[1]);
+    str[my_strlen(str)] = '=';
+    str[my_strlen(str) + 1] = 0;
     for (int i = 0; data.env[i] != 0; i++) {
-        if (my_strncmp(data.env[i], data.args[1], my_strlen(data.args[1])) == 0)
+        if (my_strncmp(data.env[i], str, my_strlen(str)) == 0)
             line = i;
     }
     return (line);

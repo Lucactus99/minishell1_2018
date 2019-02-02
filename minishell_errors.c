@@ -69,7 +69,7 @@ void print_error(int status)
     if (WTERMSIG(status) == 5)
         my_putstr_err("Trace/BPT trap\n");
     if (WTERMSIG(status) == 6) {
-        my_putstr_err("Abort\n");
+        my_putstr_err("Abort");
         if (__WCOREDUMP(status) != 0)
             my_putstr_err(" (core dumped)\n");
         else

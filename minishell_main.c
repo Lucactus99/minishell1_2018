@@ -7,14 +7,21 @@
 
 #include "my.h"
 
-void do_binary(struct data data)
+int do_binary(struct data data)
 {
     data.program_name += 2;
-    execve(data.program_name, data.args, data.env);
-    my_putstr_err("./");
-    my_putstr_err(data.program_name);
-    my_putstr_err(": Command not found.\n");
-    exit(0);
+    if (execve(data.program_name, data.args, data.env) <= 0) {
+        if (errno == 8) {
+            my_putstr_err("./");
+            my_putstr_err(data.program_name);
+            my_putstr_err(": Exec format error. Binary file not executable.\n");
+        } else if (errno == 2) {
+            my_putstr_err("./");
+            my_putstr_err(data.program_name);
+            my_putstr_err(": Command not found.\n");
+        }
+    }
+    exit(1);
 }
 
 char *const *put_args(char *av, int nbr_args)
@@ -80,6 +87,8 @@ int main(int ac, char **av, char **env)
     (void)ac;
     (void)av;
     data.exit_status = 0;
+    if (env[0] == 0)
+        env = new_path_to_env(env);
     data.path = get_path(env);
     if (data.path == NULL) {
         env = new_path_to_env(env);
