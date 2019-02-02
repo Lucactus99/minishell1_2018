@@ -27,10 +27,10 @@ int do_command(struct data data, char *tmp)
             perror("fork failed");
     }
     data.exit_status = WEXITSTATUS(status);
-    if (__WCOREDUMP(status) != 0)
+    if (WIFSIGNALED(status) == 1) {
         data.exit_status = status;
-    if (WIFSIGNALED(status) == 1)
         print_error(status);
+    }
     return (data.exit_status);
 }
 

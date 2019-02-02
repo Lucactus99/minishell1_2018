@@ -68,8 +68,13 @@ void print_error(int status)
         my_putstr_err("Illegal instruction\n");
     if (WTERMSIG(status) == 5)
         my_putstr_err("Trace/BPT trap\n");
-    if (WTERMSIG(status) == 6)
+    if (WTERMSIG(status) == 6) {
         my_putstr_err("Abort\n");
+        if (__WCOREDUMP(status) != 0)
+            my_putstr_err(" (core dumped)\n");
+        else
+            my_putchar('\n');
+    }
     if (WTERMSIG(status) == 7)
         my_putstr_err("Bus error\n");
     if (WTERMSIG(status) == 8) {
