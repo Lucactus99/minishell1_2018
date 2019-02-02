@@ -13,6 +13,10 @@ void setenv_command(struct data data)
         my_putstr_err("setenv: Too many arguments.\n");
         return;
     }
+    if (my_str_isalpha(data.args[1]) == 0) {
+        my_putstr_err("setenv: Variable name must contain alphanumeric characters.\n");
+        return;
+    }
     if (data.nbr_args == 0)
         print_env(data.env);
     else if (my_strncmp(data.args[1], "PATH", 4) == 0)

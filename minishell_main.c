@@ -39,7 +39,7 @@ char *const *put_args(char *av, int nbr_args)
     return (tmp);
 }
 
-void main_loop(struct data data)
+int main_loop(struct data data)
 {
     char *str = "lucas";
 
@@ -52,10 +52,11 @@ void main_loop(struct data data)
             data.program_name = get_program_name(str);
             data.nbr_args = get_nbr_args(str);
             data.args = put_args(str, data.nbr_args);
-            find_command(data);
+            data.exit_status = find_command(data);
             free_command(data, str);
         }
     }
+    return (data.exit_status);
 }
 
 char **new_path_to_env(char **env)
@@ -78,12 +79,13 @@ int main(int ac, char **av, char **env)
         return (84);
     (void)ac;
     (void)av;
+    data.exit_status = 0;
     data.path = get_path(env);
     if (data.path == NULL) {
         env = new_path_to_env(env);
         data.path = get_path(env);
     }
     data.env = env;
-    main_loop(data);
-    return (0);
+    data.exit_status = main_loop(data);
+    return (data.exit_status);
 }

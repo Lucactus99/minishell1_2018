@@ -32,8 +32,13 @@ void print_error_3(int status)
 
 void print_error_2(int status)
 {
-    if (WTERMSIG(status) == 11)
-        my_putstr_err("Segmentation fault\n");
+    if (WTERMSIG(status) == 11) {
+        my_putstr_err("Segmentation fault");
+        if (__WCOREDUMP(status) != 0)
+            my_putstr_err(" (core dumped)\n");
+        else
+            my_putchar('\n');
+    }
     if (WTERMSIG(status) == 12)
         my_putstr_err("User signal 2\n");
     if (WTERMSIG(status) == 13)
@@ -67,8 +72,13 @@ void print_error(int status)
         my_putstr_err("Abort\n");
     if (WTERMSIG(status) == 7)
         my_putstr_err("Bus error\n");
-    if (WTERMSIG(status) == 8)
-        my_putstr_err("Floating exception\n");
+    if (WTERMSIG(status) == 8) {
+        my_putstr_err("Floating exception");
+        if (__WCOREDUMP(status) != 0)
+            my_putstr_err(" (core dumped)\n");
+        else
+            my_putchar('\n');
+    }
     if (WTERMSIG(status) == 9)
         my_putstr_err("Killed\n");
     if (WTERMSIG(status) == 10)

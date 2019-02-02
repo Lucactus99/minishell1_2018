@@ -26,7 +26,8 @@ SRC     =   minishell_main.c \
             src/my_strncmp.c \
             src/my_strcat.c \
             src/my_putstr_err.c \
-            src/my_putchar_err.c
+            src/my_putchar_err.c \
+            src/my_str_isalpha.c
 
 OBJ     =       $(SRC:.c=.o)
 

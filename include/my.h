@@ -30,6 +30,7 @@ struct data
     char **path;
     char *old_pwd;
     char **env;
+    int exit_status;
 };
 
 
@@ -47,8 +48,8 @@ int count_lines(char *);
 char **get_path(char **);
 char *get_program_name(char *);
 int get_nbr_args(char *);
-void do_command(struct data, char *);
-void find_command(struct data);
+int do_command(struct data, char *);
+int find_command(struct data);
 void print_env(char **);
 char **modify_path(struct data);
 char **put_path(struct data);
@@ -70,5 +71,6 @@ void do_binary(struct data);
 char *remove_useless(char *);
 void print_error(int);
 void print_error_4(int);
+int my_str_isalpha(char const *);
 
 #endif //MY_H_
