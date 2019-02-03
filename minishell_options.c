@@ -30,8 +30,10 @@ char *remove_useless(char *str)
     return (new_str);
 }
 
-void print_error_5(int status)
+void print_error_6(int status)
 {
+    if (WTERMSIG(status) == 44)
+        my_putstr_err("Signal 44\n");
     if (WTERMSIG(status) == 45)
         my_putstr_err("Signal 45\n");
     if (WTERMSIG(status) == 46)
@@ -42,8 +44,12 @@ void print_error_5(int status)
         my_putstr_err("Signal 48\n");
 }
 
-void print_error_4(int status)
+void print_error_5(int status)
 {
+    if (WTERMSIG(status) == 35)
+        my_putstr_err("Second Realtime Signal\n");
+    if (WTERMSIG(status) == 36)
+        my_putstr_err("Third Realtime Signal\n");
     if (WTERMSIG(status) == 37)
         my_putstr_err("Fourth Realtime Signal\n");
     if (WTERMSIG(status) == 38)
@@ -58,7 +64,5 @@ void print_error_4(int status)
         my_putstr_err("Signal 42\n");
     if (WTERMSIG(status) == 43)
         my_putstr_err("Signal 43\n");
-    if (WTERMSIG(status) == 44)
-        my_putstr_err("Signal 44\n");
-    print_error_5(status);
+    print_error_6(status);
 }

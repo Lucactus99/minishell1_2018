@@ -7,16 +7,22 @@
 
 #include "my.h"
 
+int find_path(char **env, int j)
+{
+    for (; env[j + 1] != NULL; j++) {
+        if (my_strncmp(env[j], "PATH", 4) == 0)
+            return (j);
+    }
+    return (j);
+}
+
 char **put_path(struct data data)
 {
     int j = 0;
 
     if (data.env[0] != NULL && data.env[0] != 0) {
-        for (; data.env[j + 1] != NULL; j++) {
-            if (my_strncmp(data.env[j], "PATH", 4) == 0)
-                break;
-        }
-        if (data.env[j + 1] == NULL && my_strncmp(data.env[j], "PATH", 4) != 0) {
+        j = find_path(data.env, j);
+        if (data.env[j + 1] == NULL && my_strncmp(data.env[j], "PATH", 4)) {
             data.env[j + 1] = malloc(sizeof(char) * 40);
             j++;
         }
