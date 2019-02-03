@@ -60,7 +60,7 @@ int cd_command(struct data data)
 {
     char pwd[128];
 
-    if (data.args[1] == NULL)
+    if (data.args[1] == NULL || my_strcmp(data.args[1], "~") == 0)
         return (cd_home_command(data));
     else if (my_strcmp(data.args[1], "-") == 0)
         return (cd_old_command(data));
