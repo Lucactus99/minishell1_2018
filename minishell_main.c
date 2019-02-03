@@ -21,7 +21,8 @@ int do_binary(struct data data)
             my_putstr_err(": Command not found.\n");
         } else {
             my_putstr_err("./");
-            perror(data.program_name);
+            my_putstr_err(data.program_name);
+            my_putstr_err(": Permission denied.\n");
         }
     }
     exit(1);
