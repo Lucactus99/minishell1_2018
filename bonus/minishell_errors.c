@@ -7,8 +7,12 @@
 
 #include "my.h"
 
-void print_error_3(int status)
+void print_error_4(int status)
 {
+    if (WTERMSIG(status) == 25)
+        my_putstr_err("Filesize limit exceeded\n");
+    if (WTERMSIG(status) == 26)
+        my_putstr_err("Virtual time alarm\n");
     if (WTERMSIG(status) == 27)
         my_putstr_err("Profiling time alarm\n");
     if (WTERMSIG(status) == 29)
@@ -23,14 +27,10 @@ void print_error_3(int status)
         my_putstr_err("Signal 33\n");
     if (WTERMSIG(status) == 34)
         my_putstr_err("First Realtime Signal\n");
-    if (WTERMSIG(status) == 35)
-        my_putstr_err("Second Realtime Signal\n");
-    if (WTERMSIG(status) == 36)
-        my_putstr_err("Third Realtime Signal\n");
-    print_error_4(status);
+    print_error_5(status);
 }
 
-void print_error_2(int status)
+void print_error_3(int status)
 {
     if (WTERMSIG(status) == 11) {
         my_putstr_err("Segmentation fault");
@@ -51,10 +51,29 @@ void print_error_2(int status)
         my_putstr_err("Stack limit exceeded\n");
     if (WTERMSIG(status) == 24)
         my_putstr_err("Cputime limit exceeded\n");
-    if (WTERMSIG(status) == 25)
-        my_putstr_err("Filesize limit exceeded\n");
-    if (WTERMSIG(status) == 26)
-        my_putstr_err("Virtual time alarm\n");
+    print_error_4(status);
+}
+
+void print_error_2(int status)
+{
+    if (WTERMSIG(status) == 7) {
+        my_putstr_err("Bus error");
+        if (__WCOREDUMP(status) != 0)
+            my_putstr_err(" (core dumped)\n");
+        else
+            my_putchar('\n');
+    }
+    if (WTERMSIG(status) == 8) {
+        my_putstr_err("Floating exception");
+        if (__WCOREDUMP(status) != 0)
+            my_putstr_err(" (core dumped)\n");
+        else
+            my_putchar('\n');
+    }
+    if (WTERMSIG(status) == 9)
+        my_putstr_err("Killed\n");
+    if (WTERMSIG(status) == 10)
+        my_putstr_err("User signal 1\n");
     print_error_3(status);
 }
 
@@ -75,18 +94,5 @@ void print_error(int status)
         else
             my_putchar('\n');
     }
-    if (WTERMSIG(status) == 7)
-        my_putstr_err("Bus error\n");
-    if (WTERMSIG(status) == 8) {
-        my_putstr_err("Floating exception");
-        if (__WCOREDUMP(status) != 0)
-            my_putstr_err(" (core dumped)\n");
-        else
-            my_putchar('\n');
-    }
-    if (WTERMSIG(status) == 9)
-        my_putstr_err("Killed\n");
-    if (WTERMSIG(status) == 10)
-        my_putstr_err("User signal 1\n");
     print_error_2(status);
 }

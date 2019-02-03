@@ -20,68 +20,14 @@ int do_command(struct data data, char *tmp)
             my_putstr_err(": Permission denied.\n");
         }
         exit(1);
-    } else if (c_pid > 0) {
+    } else if (c_pid > 0)
         wait(&status);
-    } else {
-        if (data.path[0] != NULL)
-            perror("fork failed");
-    }
     data.exit_status = WEXITSTATUS(status);
     if (WIFSIGNALED(status) == 1) {
         data.exit_status = status;
         print_error(status);
     }
     return (data.exit_status);
-}
-
-int cd_command(struct data data)
-{
-    char pwd[128];
-
-    if (data.args[1] == NULL) {
-        getcwd(pwd, sizeof(pwd));
-        data.env = put_old_pwd(data.env, pwd);
-        if (chdir(get_home(data.env)) < 0) {
-            if (errno == 14)
-                my_putstr_err("cd: No home directory.\n");
-            else if (errno == 20) {
-                my_putstr_err(data.args[1]);
-                my_putstr_err(": Not a directory.\n");
-            } else
-                my_putstr_err("cd: Can't change to home directory.\n");
-            return (1);
-        }
-        return (0);
-    }
-    if (my_strcmp(data.args[1], "-") == 0) {
-        data.old_pwd = get_old_pwd(data.env);
-        if (data.old_pwd == NULL) {
-            my_putstr_err(": No such file or directory.\n");
-            return (1);
-        }
-        getcwd(pwd, sizeof(pwd));
-        if (chdir(data.old_pwd) < 0) {
-            my_putstr_err(": No such file or directory.\n");
-            return (1);
-        }
-        else
-            data.env = put_old_pwd(data.env, pwd);
-        return (0);
-    }
-    getcwd(pwd, sizeof(pwd));
-    if (my_strcmp(data.args[1], ".") != 0)
-        data.env = put_old_pwd(data.env, pwd);
-    if (chdir(data.args[1]) < 0) {
-        if (errno == 20) {
-            my_putstr_err(data.args[1]);
-            my_putstr_err(": Not a directory.\n");
-        } else if (errno == 2) {
-            my_putstr_err(data.args[1]);
-            my_putstr_err(": No such file or directory.\n");
-        }
-        return (1);
-    }
-    return (0);
 }
 
 int find_command_2(struct data data)

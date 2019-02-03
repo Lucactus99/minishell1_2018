@@ -71,7 +71,8 @@ char *is_existing(struct data);
 int do_binary(struct data);
 char *remove_useless(char *);
 void print_error(int);
-void print_error_4(int);
+void print_error_5(int);
 int my_str_isalpha(char const *);
+int cd_command(struct data);
 
 #endif //MY_H_

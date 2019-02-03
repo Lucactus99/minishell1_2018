@@ -7,16 +7,22 @@
 
 #include "my.h"
 
+int find_path(char **env, int j)
+{
+    for (; env[j + 1] != NULL; j++) {
+        if (my_strncmp(env[j], "PATH", 4) == 0)
+            return (j);
+    }
+    return (j);
+}
+
 char **put_path(struct data data)
 {
     int j = 0;
 
     if (data.env[0] != NULL && data.env[0] != 0) {
-        for (; data.env[j + 1] != NULL; j++) {
-            if (my_strncmp(data.env[j], "PATH", 4) == 0)
-                break;
-        }
-        if (data.env[j + 1] == NULL && my_strncmp(data.env[j], "PATH", 4) != 0) {
+        j = find_path(data.env, j);
+        if (data.env[j + 1] == NULL && my_strncmp(data.env[j], "PATH", 4)) {
             data.env[j + 1] = malloc(sizeof(char) * 40);
             j++;
         }
@@ -80,18 +86,4 @@ char **get_path(char **env)
     for (int j = 0; j < count_lines(env[i]); j++)
         path[j] = malloc(sizeof(char) * 20);
     return (fill_path(path, env, i));
-}
-
-char **add_env(struct data data)
-{
-    int j = 0;
-
-    for (; data.env[j] != NULL; j++);
-    data.env[j] = malloc(sizeof(char) * 20);
-    data.env[j] = my_strcpy(data.env[j], data.args[1]);
-    data.env[j] = my_strcat(data.env[j], "=");
-    for (int i = 2; i <= data.nbr_args; i++)
-        data.env[j] = my_strcat(data.env[j], data.args[i]);
-    data.env[j + 1] = 0;
-    return (data.env);
 }
