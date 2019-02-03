@@ -14,7 +14,7 @@ int do_binary(struct data data)
         if (errno == 8) {
             my_putstr_err("./");
             my_putstr_err(data.program_name);
-            my_putstr_err(": Exec format error. Binary file not executable.\n");
+            my_putstr_err(": Exec format error. Wrong Architecture.\n");
         } else if (errno == 2) {
             my_putstr_err("./");
             my_putstr_err(data.program_name);
