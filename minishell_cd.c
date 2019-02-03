@@ -19,8 +19,10 @@ int cd_home_command(struct data data)
         else if (errno == 20) {
             my_putstr_err(data.args[1]);
             my_putstr_err(": Not a directory.\n");
-        } else
-            my_putstr_err("cd: Can't change to home directory.\n");
+        } else {
+            my_putstr_err(get_home(data.env));
+            my_putstr_err(": No such file or directory.\n");
+        }
         return (1);
     }
     return (0);
@@ -53,6 +55,10 @@ void print_cd_err(char *str)
     } else if (errno == 2) {
         my_putstr_err(str);
         my_putstr_err(": No such file or directory.\n");
+    }
+    if (errno == 13) {
+        my_putstr_err(str);
+        my_putstr_err(": Permission denied.\n");
     }
 }
 
