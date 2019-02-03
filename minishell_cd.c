@@ -32,7 +32,7 @@ int cd_old_command(struct data data)
 
     data.old_pwd = get_old_pwd(data.env);
     if (data.old_pwd == NULL) {
-        my_putstr_err(": No such file or directory.\n");
+        my_putstr_err("cd: No $OLDPWD variable set.\n");
         return (1);
     }
     getcwd(pwd, sizeof(pwd));
@@ -40,8 +40,7 @@ int cd_old_command(struct data data)
         my_putstr_err(data.old_pwd);
         my_putstr_err(": No such file or directory.\n");
         return (1);
-    }
-    else
+    } else
         data.env = put_old_pwd(data.env, pwd);
     return (0);
 }

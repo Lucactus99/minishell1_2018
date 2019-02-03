@@ -9,7 +9,9 @@
 
 char **put_old_pwd(char **env, char *pwd)
 {
-    for (int i = 0; env[i] != NULL; i++) {
+    int i = 0;
+
+    for (; env[i] != NULL; i++) {
         if (my_strncmp(env[i], "OLDPWD", 6) == 0) {
             env[i] = malloc(sizeof(char) * (my_strlen(pwd) + 7));
             env[i] = my_strcpy(env[i], "OLDPWD=");
@@ -17,6 +19,10 @@ char **put_old_pwd(char **env, char *pwd)
             return (env);
         }
     }
+    env[i] = malloc(sizeof(char) * 100);
+    env[i] = my_strcpy(env[i], "OLDPWD=");
+    env[i] = my_strcat(env[i], pwd);
+    env[i + 1] = 0;
     return (env);
 }
 
