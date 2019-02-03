@@ -75,3 +75,21 @@ int cd_command(struct data data)
     }
     return (0);
 }
+
+void print_prompt(struct data data)
+{
+    char pwd[128];
+
+    if (isatty(0)) {
+        getcwd(pwd, sizeof(pwd));
+        my_putstr("\033[1;36m");
+        my_putstr(pwd);
+        if (data.exit_status == 0) {
+            my_putstr("\033[0m ");
+            my_putstr("\033[1;32m§> \033[0m");
+        } else {
+            my_putstr("\033[0m ");
+            my_putstr("\033[1;31m§> \033[0m");
+        }
+    }
+}

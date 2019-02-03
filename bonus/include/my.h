@@ -74,5 +74,6 @@ void print_error(int);
 void print_error_5(int);
 int my_str_isalpha(char const *);
 int cd_command(struct data);
+void print_prompt(struct data);
 
 #endif //MY_H_

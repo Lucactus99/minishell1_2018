@@ -49,21 +49,9 @@ char *const *put_args(char *av, int nbr_args)
 int main_loop(struct data data)
 {
     char *str = "lucas";
-    char pwd[128];
 
     while (str != NULL && my_strcmp(str, "exit") != 0) {
-        if (isatty(0)) {
-            getcwd(pwd, sizeof(pwd));
-            my_putstr("\033[1;36m");
-            my_putstr(pwd);
-            if (data.exit_status == 0) {
-                my_putstr("\033[0m ");
-                my_putstr("\033[1;32m§> \033[0m");
-            } else {
-                my_putstr("\033[0m ");
-                my_putstr("\033[1;31m§> \033[0m");
-            }
-        }
+        print_prompt(data);
         str = get_next_line(0);
         if (str != NULL && str[0] != 0) {
             str = remove_useless(str);
