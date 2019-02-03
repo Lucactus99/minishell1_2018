@@ -37,6 +37,7 @@ int cd_old_command(struct data data)
     }
     getcwd(pwd, sizeof(pwd));
     if (chdir(data.old_pwd) < 0) {
+        my_putstr_err(data.old_pwd);
         my_putstr_err(": No such file or directory.\n");
         return (1);
     }
